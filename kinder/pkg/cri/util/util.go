@@ -48,6 +48,12 @@ func CommonArgs(cluster, name, role string) ([]string, error) {
 	// TODO: enable IPv6 if necessary
 	// args = append(args, "--sysctl=net.ipv6.conf.all.disable_ipv6=0", "--sysctl=net.ipv6.conf.all.forwarding=1")
 
+	kinderNetworkEnv := os.Getenv(kinderNetwork)
+
+	if kinderNetworkEnv != "" {
+		args = append(args, "--network", kinderNetworkEnv)
+	}
+
 	// pass proxy environment variables
 	proxyEnv, err := getProxyEnvs()
 	if err != nil {
@@ -69,6 +75,7 @@ const (
 	httpProxy      = "HTTP_PROXY"
 	httpsProxy     = "HTTPS_PROXY"
 	noProxy        = "NO_PROXY"
+	kinderNetwork  = "KINDER_NETWORK"
 )
 
 func getProxyEnvs() (map[string]string, error) {
